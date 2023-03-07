@@ -1,0 +1,44 @@
+﻿<Window x:Class="LaskutusSovellus.LaskutusView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LaskutusSovellus"
+        mc:Ignorable="d"
+        Title="LaskutusView" Height="400" Width="300">
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Id" Width="150"/>
+                <Label Content="Value" Width="150"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Maksajan Osoitetiedot" Width="150"/>
+                <Label Content="Value" Width="150"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Laskuttajan Osoitetiedot" Width="150"/>
+                <Label Content="Value" Width="150"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Päiväys" Width="150"/>
+                <Label Content="Value" Width="150"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Eräpäivä" Width="150"/>
+                <Label Content="Value" Width="150"/>
+            </StackPanel>
+
+            <TextBox Height="61" Text="Lisätiedot" />
+        </StackPanel>
+    </Grid>
+</Window>
