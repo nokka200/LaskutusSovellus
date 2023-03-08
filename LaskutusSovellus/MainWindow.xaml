@@ -6,19 +6,24 @@
         xmlns:local="clr-namespace:LaskutusSovellus"
         mc:Ignorable="d"
         Title="Laskutussovellus" Height="500" Width="300">
+
+    <Window.DataContext>
+        <local:InvoiceHolder/>
+    </Window.DataContext>
+    
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="1">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Invoices}" AutoGenerateColumns="False" x:Name="DtgMain">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"/>
-                <DataGridTextColumn Header="Tilaaja" Width="*"/>
+                <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Tilaaja" Width="*" Binding="{Binding AddressBiller}"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Click="Button_Click" />
+        <Button Click="OpenInformationWindow" Content="Open" />
     </Grid>
 </Window>

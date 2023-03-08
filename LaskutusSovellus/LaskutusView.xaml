@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LaskutusSovellus"
         mc:Ignorable="d"
-        Title="LaskutusView" Height="400" Width="300">
+        Title="LaskutusView" Height="400" Width="400">
+
+    <Window.DataContext>
+        <local:Invoice/>
+    </Window.DataContext>
+    
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,28 +22,36 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" >
                 <Label Content="Id" Width="150"/>
-                <Label Content="Value" Width="150"/>
+                <TextBox Text="{Binding Id}" Width="150"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Maksajan Osoitetiedot" Width="150"/>
-                <Label Content="Value" Width="150"/>
+                <TextBox Text="{Binding AddressDelivery}" Width="150"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Laskuttajan Osoitetiedot" Width="150"/>
-                <Label Content="Value" Width="150"/>
+                <TextBox Text="{Binding AddressBiller}" Width="150"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Päiväys" Width="150"/>
-                <Label Content="Value" Width="150"/>
+                <TextBox Text="{Binding DateBill}" Width="150"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Eräpäivä" Width="150"/>
-                <Label Content="Value" Width="150"/>
+                <TextBox Text="{Binding DateDue}" Width="150"/>
             </StackPanel>
 
-            <TextBox Height="61" Text="Lisätiedot" />
+            <TextBox Height="61" Text="Lisätiedot" TextWrapping="Wrap"/>
         </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tuote" Width="75"/>
+                <DataGridTextColumn Header="Määrä" Width="45"/>
+                <DataGridTextColumn Header="Hinta" Width="45"/>
+                <DataGridTextColumn Header="Yhteensä" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
