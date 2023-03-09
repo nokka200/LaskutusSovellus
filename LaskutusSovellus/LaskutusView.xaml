@@ -45,11 +45,11 @@
 
             <TextBox Height="61" Text="Lisätiedot" TextWrapping="Wrap"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False" x:Name="DtgLaskutusView">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Tuote" Width="75"/>
-                <DataGridTextColumn Header="Määrä" Width="45"/>
-                <DataGridTextColumn Header="Hinta" Width="45"/>
+                <DataGridTextColumn Header="Tuote" Width="75" Binding="{Binding ProductName}"/>
+                <DataGridTextColumn Header="Määrä" Width="45" Binding="{Binding ProductAmount}"/>
+                <DataGridTextColumn Header="Hinta" Width="45" Binding="{Binding ProductCost}"/>
                 <DataGridTextColumn Header="Yhteensä" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>

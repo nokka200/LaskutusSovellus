@@ -17,22 +17,20 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 /*
-UI OK
-Tietokanta OK, tietokannan luonti puuttuu codebehindissä, testi tietokanta OK
-Yhteys toimii ensimmäisellä sivulla, ei päivitä vielä mitään
-Yhteys toiselle sivulle, tiedot toimii mutta rivit eivät vielä
 
 ToDo
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
-Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
+
 
 InProgress
+Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 
 Done
 UI
 Kaikkien laskutietojen hakeminen ja listaaminen
 Kaikkien tuotetietojen hakeminen listaaminen
+Kaikkien laskujen lisätietojen hakeminen ja listaaminen
 
 
 */
@@ -43,8 +41,8 @@ namespace LaskutusSovellus
     /// </summary>
     public partial class MainWindow : Window
     {
-        InvoiceRepository repoObj;
-        InvoiceHolder holderObj;
+        InvoiceRepository repoObj;  // Hoitaa tietokannan kanssa juttelemisen
+        InvoiceHolder holderObj;    // collection joka pitää sisällä kaikki Invoice oliot
 
         public MainWindow()
         {
@@ -111,7 +109,6 @@ namespace LaskutusSovellus
         public string? ProductName { get; set; }
         public int ProductAmount { get; set; }
         public double ProductCost { get; set; }
-        public double CostTotal { get; set; }
 
         public ContractDetails()
         {
@@ -128,13 +125,16 @@ namespace LaskutusSovellus
         const string LOCAL_CONNECT = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1;";
         const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=projektityo_nn_2206189;";
 
+        const string SELECT_ALL_INVOICE = "SELECT * FROM invoice";
+
+
         public ObservableCollection<Invoice> GetInvoices()
         {
             var invoices = new ObservableCollection<Invoice>();
 
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
             {
-                var cmdObj = SqlExecuteReader(connObj, "SELECT * FROM invoice");
+                var cmdObj = SqlExecuteReader(connObj, SELECT_ALL_INVOICE);
                 var dr = cmdObj.ExecuteReader();
 
                 while (dr.Read())
@@ -154,10 +154,29 @@ namespace LaskutusSovellus
             return invoices;
         }
 
-        public ObservableCollection<ContractDetails> GetDetails()
+        public ObservableCollection<ContractDetails> GetDetails(int keyValue)
         {
-            var details = new ObservableCollection<ContractDetails>();
+            // Hakee tiedot Invoice.Details property olioihin eli muodostaa ContractDetails oliot tietokannan perusteella
+            keyValue++;
 
+            var details = new ObservableCollection<ContractDetails>();
+            using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
+            {
+                var cmdObj = SqlExecuteReader(connObj, $"SELECT product_amount, product_cost, product_name FROM product WHERE product_id IN (SELECT product_id FROM laskun_rivit WHERE invoice_id = {keyValue})");
+                var dr = cmdObj.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    details.Add(new ContractDetails
+                    {
+                        ProductName = dr.GetString("product_name"),
+                        ProductAmount = dr.GetInt32("product_amount"),
+                        ProductCost = dr.GetDouble("product_cost"),
+                    });
+                }
+
+            }
+            
             return details;
         }
 

@@ -37,7 +37,12 @@ namespace LaskutusSovellus
             holderObj.Invoices = repoObj.GetInvoices();
             CheckSelected(holderObj.Invoices.Count);
 
-            DataContext = holderObj.Invoices[Selected];
+            holderObj.Invoices[Selected].Details = repoObj.GetDetails(Selected);    // Haetaan kaikki laskun lisätiedot
+
+            DataContext = holderObj.Invoices[Selected];                             // Asetetaan haettu lasku tiedosidonnan kohteeksi
+            DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // haetaan datagridin lähde oikeaksi ContractDetail olioksi
+            // Tämä vaikuttaa ouodolta, tarkkaile jos parempi vaihtoehto NOTICE
+
         }
 
         private void CheckSelected(int max)
