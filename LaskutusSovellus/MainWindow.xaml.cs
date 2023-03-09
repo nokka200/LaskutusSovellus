@@ -22,7 +22,20 @@ Tietokanta OK, tietokannan luonti puuttuu codebehindissä, testi tietokanta OK
 Yhteys toimii ensimmäisellä sivulla, ei päivitä vielä mitään
 Yhteys toiselle sivulle, tiedot toimii mutta rivit eivät vielä
 
- */
+ToDo
+Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
+Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
+Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
+
+InProgress
+
+Done
+UI
+Kaikkien laskutietojen hakeminen ja listaaminen
+Kaikkien tuotetietojen hakeminen listaaminen
+
+
+*/
 namespace LaskutusSovellus
 {
     /// <summary>
@@ -46,15 +59,11 @@ namespace LaskutusSovellus
 
         private void OpenInformationWindow(object sender, RoutedEventArgs e)
         {
+            // Otetaan valittu rivi talteen josta avataan lisätiedot
             int re = DtgMain.SelectedIndex;
 
             LaskutusView laskutusView = new(re);
             laskutusView.ShowDialog();
-        }
-
-        private void Selected()
-        {
-            int re = DtgMain.SelectedIndex;
         }
     }
 

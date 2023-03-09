@@ -50,11 +50,14 @@ namespace LaskutusSovellus
             }
             if(Selected == max)
             {
+                /*
                 holderObj.Invoices.Add(new Invoice
                 {
 
                 });
                 // TODO pitäisi lisätä uusi rivi tietokantaan
+                */
+                Selected--;
             }
         }
     }
