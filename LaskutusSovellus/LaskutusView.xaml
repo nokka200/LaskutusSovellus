@@ -24,7 +24,7 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Content="Id" Width="150"/>
-                <TextBox Text="{Binding Id}" Width="150"/>
+                <TextBox Text="{Binding Id}" Width="150" IsReadOnly="True" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Maksajan Osoitetiedot" Width="150"/>
@@ -32,7 +32,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Laskuttajan Osoitetiedot" Width="150"/>
-                <TextBox Text="{Binding AddressBiller}" Width="150" IsReadOnly="True"/>
+                <TextBox Text="{Binding AddressBiller}" Width="150" IsReadOnly="True" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Päiväys" Width="150"/>
