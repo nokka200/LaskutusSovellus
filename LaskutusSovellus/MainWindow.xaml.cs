@@ -18,20 +18,25 @@ using System.Windows.Shapes;
 
 /*
 
-ToDo
+TO_DO
+
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
 
-InProgress
-Ui Tallennus napin lisääminen LaskutusView ja sen toiminnan tekeminen
+IN_PROGRESS
+TallennusView Tallennus napin toiminta
 
-Done
+DONE
 UI
+Ui Tallennus napin lisääminen LaskutusView 
+Ui Poisto napin lisääminen LaskutusView 
+
 Kaikkien laskutietojen hakeminen ja listaaminen
 Kaikkien tuotetietojen hakeminen listaaminen
 Kaikkien laskujen lisätietojen hakeminen ja listaaminen
 Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
+
 
 
 */
@@ -326,8 +331,13 @@ namespace LaskutusSovellus
                 }
 
             }
-            
             return details;
+        }
+
+        public void UpdateInvoice(Invoice toUpdate)
+        {
+            // TODO Update to database
+
         }
 
         private static MySqlCommand SqlExecuteReader(MySqlConnection connObj, string command)
@@ -338,5 +348,6 @@ namespace LaskutusSovellus
             MySqlCommand cmdObj = new(command, connObj);
             return cmdObj;
         }
+       
     }
 }

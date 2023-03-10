@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LaskutusSovellus"
         mc:Ignorable="d"
-        Title="LaskutusView" Height="400" Width="400">
+        Title="Laskun lisätiedot" Height="400" Width="420">
 
     <Window.DataContext>
         <local:Invoice/>
@@ -36,12 +36,13 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Päiväys" Width="150"/>
-                <TextBox Text="{Binding DateBill}" Width="150"/>
+                <TextBox Text="{Binding DateBill}" Width="150" IsReadOnly="True" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Eräpäivä" Width="150"/>
-                <TextBox Text="{Binding DateDue}" Width="150"/>
-                <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna"/>
+                <TextBox Text="{Binding DateDue}" Width="150" IsReadOnly="True" IsEnabled="False"/>
+                <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna" Width="47"/>
+                <Button x:Name="BtnDelete" Margin="5,0,0,0" Content="Poista" Width="47"/>
             </StackPanel>
 
             <TextBox Height="61" Text="{Binding ExtraInformation}" TextWrapping="Wrap"/>
@@ -50,8 +51,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tuote" Width="75" Binding="{Binding ProductName}"/>
                 <DataGridTextColumn Header="Määrä" Width="45" Binding="{Binding ProductAmount}"/>
-                <DataGridTextColumn Header="Hinta" Width="45" Binding="{Binding ProductCost}"/>
-                <DataGridTextColumn Header="Yhteensä" Width="*"/>
+                <DataGridTextColumn Header="Hinta" Width="*" Binding="{Binding ProductCost}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
