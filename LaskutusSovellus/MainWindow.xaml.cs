@@ -24,6 +24,7 @@ Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
 
 InProgress
+Ui Tallennus napin lisääminen LaskutusView ja sen toiminnan tekeminen
 
 Done
 UI

@@ -41,9 +41,10 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Eräpäivä" Width="150"/>
                 <TextBox Text="{Binding DateDue}" Width="150"/>
+                <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna"/>
             </StackPanel>
 
-            <TextBox Height="61" Text="Lisätiedot" TextWrapping="Wrap"/>
+            <TextBox Height="61" Text="{Binding ExtraInformation}" TextWrapping="Wrap"/>
         </StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False" x:Name="DtgLaskutusView">
             <DataGrid.Columns>
