@@ -207,6 +207,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Luo oletus Invoice taulun
+        /// </summary>
         public void CreateInvoiceTable()
         {
             //luo Invoice taulun tietokantaan
@@ -219,6 +222,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Luo oletus Product taulun
+        /// </summary>
         public void CreateProductTable()
         {
             // luo product taulun tietokantaan
@@ -230,6 +236,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Luo oletus laskun_rivit taulun 
+        /// </summary>
         public void CreateLaskunRivitTable()
         {
             // luo yhteisen laskun_rivit taulun tietokantaan
@@ -241,6 +250,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Antaa oletusarvot Invoice tauluun
+        /// </summary>
         public void AddDefaultInvoice()
         {
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
@@ -251,6 +263,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Antaa oletusarvot Product tauluun
+        /// </summary>
         public void AddDefaultProduct()
         {
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
@@ -261,6 +276,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Antaa oletusarvot laskutus_rivit tauluun
+        /// </summary>
         public void AddDefaultLaskunRivit()
         {
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
@@ -334,7 +352,7 @@ namespace LaskutusSovellus
             return details;
         }
 
-        public void UpdateInvoice(Invoice toUpdate)
+        public void UpdateInvoice(int keyValue)
         {
             // TODO Update to database
 
