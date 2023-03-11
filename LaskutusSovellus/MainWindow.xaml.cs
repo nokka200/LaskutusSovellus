@@ -25,7 +25,7 @@ Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
 
 IN_PROGRESS
-LaskutusView Tallennus napin toiminta Invoice.Details tietojen osalta
+
 
 DONE
 UI
@@ -38,6 +38,7 @@ Kaikkien laskujen lisätietojen hakeminen ja listaaminen
 Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 
 LaskutusView Tallennus napin toiminta Invoice tietojen osalta
+LaskutusView Tallennus napin toiminta Invoice.Details tietojen osalta
 
 
 */
@@ -375,15 +376,45 @@ namespace LaskutusSovellus
         public void UpdateDetails(Invoice invoiceToUpdate)
         {
             // Päivittää Invoice Details osion
+            // Pitää ensin päivittää Product tauluun tiedot ja sen jälkeen tehdä yhteys laskun_rivit tauluun kyseisen avatun laskun kanssa
             using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
             {
                 conn.Open();
 
                 foreach(var line in invoiceToUpdate.Details)
                 {
+                    if(line.ProductId == 0)
+                    {
+                        // Tämä luo uuden rivin Product pöytään
+                        MySqlCommand cmdIns = new MySqlCommand("INSERT INTO product (product_amount, product_cost, product_name) VALUES(@product_amount, @product_cost, @product_name)", conn);
+                        cmdIns.Parameters.AddWithValue("@product_amount", line.ProductAmount);
+                        cmdIns.Parameters.AddWithValue("@product_cost", line.ProductCost);
+                        cmdIns.Parameters.AddWithValue("@product_name", line.ProductName);
+                        cmdIns.ExecuteNonQuery();
+                        Debug.WriteLine(line.ProductId);
 
+                        int re = GetNewProductId(conn);
+
+                        conn.Open();            // joku bugi että yhteys pitää sulkea ja avata uusiksi
+                        // Tämä yhdistää luodun productin avoinna olevaan Invoice laskuun
+                        MySqlCommand cmdInsLaskunRivit = new MySqlCommand("INSERT INTO laskun_rivit (invoice_id, product_id) VALUES(@invoice_id, @product_id)", conn);
+                        cmdInsLaskunRivit.Parameters.AddWithValue("@invoice_id", invoiceToUpdate.Id);
+                        cmdInsLaskunRivit.Parameters.AddWithValue("@product_id", re);            
+                        cmdInsLaskunRivit.ExecuteNonQuery();
+                    }
                 }
             }
+        }
+
+        private static int GetNewProductId(MySqlConnection conn)
+        {
+            // Hakee uusimman product_id että saadaan yhdistettyä lasku ja lisätiedot
+            var newestProductId = new MySqlCommand("SELECT MAX(product_id) AS product_id FROM product", conn);
+            var dr = newestProductId.ExecuteReader();
+            dr.Read();
+            int re = dr.GetInt32("product_id");
+            conn.Close();
+            return re;
         }
 
         private static MySqlCommand SqlExecuteReader(MySqlConnection connObj, string command)

@@ -69,12 +69,16 @@ namespace LaskutusSovellus
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             // Tämä nappi tallentaa ainoastaan Invoice luokan tietoja
-            var invoce = (Invoice)DataContext;              // Haetaan DataContect Invoice muodossa
-            repoObj.UpdateInvoice(invoce);                  // Tehdään päivitys tietokantaan
-            holderObj.Invoices = repoObj.GetInvoices();     // Haetaan laskun tiedot uudestaan
-            DataContext = holderObj.Invoices[Selected];     // päivitetään DataContext uusimmilla tiedoilla
+            var invoce = (Invoice)DataContext;                                      // Haetaan DataContect Invoice muodossa
+            repoObj.UpdateInvoice(invoce);                                          // Tehdään päivitys tietokantaan
 
-            // TODO Details ominaisuuksien päivittäminen
+            repoObj.UpdateDetails(invoce);                                          // UUSi feature, päivittää laskun detailsit
+
+            holderObj.Invoices = repoObj.GetInvoices();                             // Haetaan laskun tiedot uudestaan
+            holderObj.Invoices[Selected].Details = repoObj.GetDetails(Selected);    // Haetaan kaikki laskun lisätiedot
+
+            DataContext = holderObj.Invoices[Selected];                             // päivitetään DataContext uusimmilla tiedoilla
+            DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // päivitetään myös laskun lisätiedot
         }
     }
 }
