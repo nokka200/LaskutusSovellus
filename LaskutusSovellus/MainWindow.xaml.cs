@@ -25,7 +25,7 @@ Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
 
 IN_PROGRESS
-TallennusView Tallennus napin toiminta
+LaskutusView Tallennus napin toiminta Invoice.Details tietojen osalta
 
 DONE
 UI
@@ -37,6 +37,7 @@ Kaikkien tuotetietojen hakeminen listaaminen
 Kaikkien laskujen lisätietojen hakeminen ja listaaminen
 Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 
+LaskutusView Tallennus napin toiminta Invoice tietojen osalta
 
 
 */
@@ -131,6 +132,7 @@ namespace LaskutusSovellus
 
     public class ContractDetails
     {
+        public int ProductId { get; set; }
         public string? ProductName { get; set; }
         public int ProductAmount { get; set; }
         public double ProductCost { get; set; }
@@ -335,13 +337,14 @@ namespace LaskutusSovellus
             var details = new ObservableCollection<ContractDetails>();
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
             {
-                var cmdObj = SqlExecuteReader(connObj, $"SELECT product_amount, product_cost, product_name FROM product WHERE product_id IN (SELECT product_id FROM laskun_rivit WHERE invoice_id = {keyValue})");
+                var cmdObj = SqlExecuteReader(connObj, $"SELECT product_id, product_amount, product_cost, product_name FROM product WHERE product_id IN (SELECT product_id FROM laskun_rivit WHERE invoice_id = {keyValue})");
                 var dr = cmdObj.ExecuteReader();
 
                 while (dr.Read())
                 {
                     details.Add(new ContractDetails
                     {
+                        ProductId = dr.GetInt32("product_id"),
                         ProductName = dr.GetString("product_name"),
                         ProductAmount = dr.GetInt32("product_amount"),
                         ProductCost = dr.GetDouble("product_cost"),
@@ -352,10 +355,35 @@ namespace LaskutusSovellus
             return details;
         }
 
-        public void UpdateInvoice(int keyValue)
+        public void UpdateInvoice(Invoice invoiceToUpdate)
         {
-            // TODO Update to database
+            // TODO Update to database päivämäärien muutos
+            // tällä hetkellä päivittää kaikki muut paitsi ID ja päivämäärät
+            using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
+            {
+                conn.Open();
 
+                // Päivämäärien muutos jätetty pois
+                MySqlCommand cmd = new MySqlCommand($"UPDATE invoice SET address_delivery = @address_delivery, extra_information = @extra_information where invoice_id = @invoice_id", conn);
+                cmd.Parameters.AddWithValue("@address_delivery", invoiceToUpdate.AddressDelivery);
+                cmd.Parameters.AddWithValue("@extra_information", invoiceToUpdate.ExtraInformation);
+                cmd.Parameters.AddWithValue("@invoice_id", invoiceToUpdate.Id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateDetails(Invoice invoiceToUpdate)
+        {
+            // Päivittää Invoice Details osion
+            using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
+            {
+                conn.Open();
+
+                foreach(var line in invoiceToUpdate.Details)
+                {
+
+                }
+            }
         }
 
         private static MySqlCommand SqlExecuteReader(MySqlConnection connObj, string command)

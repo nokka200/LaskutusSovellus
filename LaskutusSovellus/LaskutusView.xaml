@@ -41,7 +41,7 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Eräpäivä" Width="150"/>
                 <TextBox Text="{Binding DateDue}" Width="150" IsReadOnly="True" IsEnabled="False"/>
-                <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna" Width="47"/>
+                <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna" Width="47" Click="BtnSave_Click"/>
                 <Button x:Name="BtnDelete" Margin="5,0,0,0" Content="Poista" Width="47"/>
             </StackPanel>
 
@@ -49,6 +49,7 @@
         </StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False" x:Name="DtgLaskutusView">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="45" Binding="{Binding ProductId}"/>
                 <DataGridTextColumn Header="Tuote" Width="75" Binding="{Binding ProductName}"/>
                 <DataGridTextColumn Header="Määrä" Width="45" Binding="{Binding ProductAmount}"/>
                 <DataGridTextColumn Header="Hinta" Width="*" Binding="{Binding ProductCost}"/>

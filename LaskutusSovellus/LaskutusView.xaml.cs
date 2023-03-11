@@ -65,5 +65,16 @@ namespace LaskutusSovellus
                 Selected--;
             }
         }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            // Tämä nappi tallentaa ainoastaan Invoice luokan tietoja
+            var invoce = (Invoice)DataContext;              // Haetaan DataContect Invoice muodossa
+            repoObj.UpdateInvoice(invoce);                  // Tehdään päivitys tietokantaan
+            holderObj.Invoices = repoObj.GetInvoices();     // Haetaan laskun tiedot uudestaan
+            DataContext = holderObj.Invoices[Selected];     // päivitetään DataContext uusimmilla tiedoilla
+
+            // TODO Details ominaisuuksien päivittäminen
+        }
     }
 }
