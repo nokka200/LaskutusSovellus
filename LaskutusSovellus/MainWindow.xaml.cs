@@ -23,14 +23,13 @@ TO_DO
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
-MainWindow yhden laskun poisto 
 MainWidow uuden laskun lisääminen
-LaskutusView Details rivin poistaminen
-LaskutusView Details kokonaishinta
+
+
 
 
 IN_PROGRESS
-
+LaskutusView Details kokonaishinta
 
 DONE
 UI
@@ -45,6 +44,9 @@ Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 LaskutusView Tallennus napin toiminta Invoice tietojen osalta
 LaskutusView Tallennus napin toiminta Invoice.Details uusien tietojen osalta
 LaskutusView Tallennus napin toiminta Invoice.Details vanhojen tietojen päivitys
+LaskutusView Details rivin poistaminen
+
+MainWindow yhden laskun poisto 
 
 
 */
@@ -69,6 +71,7 @@ namespace LaskutusSovellus
 
             holderObj.Invoices = repoObj.GetInvoices();
             DataContext = holderObj;
+            DtgMain.ItemsSource = holderObj.Invoices;
         }
 
         private void DropAndCreateDb()
@@ -88,13 +91,26 @@ namespace LaskutusSovellus
             repoObj.AddDefaultLaskunRivit();
         }
 
-        private void OpenInformationWindow(object sender, RoutedEventArgs e)
+        private void Btn_OpenInformationWindow(object sender, RoutedEventArgs e)
         {
             // Otetaan valittu rivi talteen josta avataan lisätiedot
             int re = DtgMain.SelectedIndex;
 
             LaskutusView laskutusView = new(re);
             laskutusView.ShowDialog();
+        }
+
+        private void Btn_DeleteInformationWindow(object sender, RoutedEventArgs e)
+        {
+            // Poistaa valitun rivin
+            var re = (Invoice)DtgMain.SelectedItem;
+            repoObj.DeleteInvoice(re.Id);
+
+            // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
+            holderObj.Invoices = repoObj.GetInvoices();
+            DataContext = holderObj;
+            DtgMain.ItemsSource = holderObj.Invoices;
+            // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
         }
     }
 
@@ -431,6 +447,17 @@ namespace LaskutusSovellus
                 conn.Open();
 
                 MySqlCommand cmdDel = new MySqlCommand($"DELETE FROM product WHERE product_id = {selected}", conn);
+                cmdDel.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteInvoice(int selected)
+        {
+            using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
+            {
+                conn.Open();
+
+                MySqlCommand cmdDel = new MySqlCommand($"DELETE FROM invoice WHERE invoice_id = {selected}", conn);
                 cmdDel.ExecuteNonQuery();
             }
         }

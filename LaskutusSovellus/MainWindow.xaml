@@ -11,7 +11,7 @@
         <local:InvoiceHolder/>
     </Window.DataContext>
     
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="3*"/>
@@ -23,7 +23,19 @@
                 <DataGridTextColumn Header="Tilaaja" Width="*" Binding="{Binding AddressBiller}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Click="Btn_OpenInformationWindow" Content="Avaa" Grid.Row="1" Margin="5"/>
+            <Button Content="Poista" Grid.Column="1" Grid.Row="1" Margin="5" Click="Btn_DeleteInformationWindow"/>
+        </Grid>
 
-        <Button Click="OpenInformationWindow" Content="Open" />
+        
     </Grid>
 </Window>
