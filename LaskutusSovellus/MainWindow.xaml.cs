@@ -23,6 +23,11 @@ TO_DO
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
+MainWindow yhden laskun poisto 
+MainWidow uuden laskun lisääminen
+LaskutusView Details rivin poistaminen
+LaskutusView Details kokonaishinta
+
 
 IN_PROGRESS
 
@@ -38,7 +43,8 @@ Kaikkien laskujen lisätietojen hakeminen ja listaaminen
 Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 
 LaskutusView Tallennus napin toiminta Invoice tietojen osalta
-LaskutusView Tallennus napin toiminta Invoice.Details tietojen osalta
+LaskutusView Tallennus napin toiminta Invoice.Details uusien tietojen osalta
+LaskutusView Tallennus napin toiminta Invoice.Details vanhojen tietojen päivitys
 
 
 */
@@ -176,8 +182,8 @@ namespace LaskutusSovellus
                                                     "invoice_id INT NOT NULL," +
                                                     "product_id INT NOT NULL," +
                                                     "PRIMARY KEY (rivi_id)," +
-                                                    "FOREIGN KEY (invoice_id) REFERENCES invoice(invoice_id)," +
-                                                    "FOREIGN KEY (product_id) REFERENCES product(product_id)," +
+                                                    "FOREIGN KEY (invoice_id) REFERENCES invoice(invoice_id) ON DELETE cascade," +
+                                                    "FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE cascade," +
                                                     "UNIQUE (invoice_id, product_id))";
 
         const string INSERT_DEFAULT_INVOICE = "INSERT INTO invoice (address_delivery, date_bill, date_due, extra_information)" +
@@ -396,13 +402,36 @@ namespace LaskutusSovellus
                         int re = GetNewProductId(conn);
 
                         conn.Open();            // joku bugi että yhteys pitää sulkea ja avata uusiksi
+
+                        // HUOM tämä ehkä turhaa jos ON UPDATE CASCADE mahdollisesti ajaa samanaa asiaa
                         // Tämä yhdistää luodun productin avoinna olevaan Invoice laskuun
                         MySqlCommand cmdInsLaskunRivit = new MySqlCommand("INSERT INTO laskun_rivit (invoice_id, product_id) VALUES(@invoice_id, @product_id)", conn);
                         cmdInsLaskunRivit.Parameters.AddWithValue("@invoice_id", invoiceToUpdate.Id);
                         cmdInsLaskunRivit.Parameters.AddWithValue("@product_id", re);            
                         cmdInsLaskunRivit.ExecuteNonQuery();
                     }
+                    else
+                    {
+                        // jos ei ole uusi rivi, päivitetään vanhat HUOM rivit jotka eivät kuulu avattuun laskuun!
+                        MySqlCommand cmdUpdate = new MySqlCommand("UPDATE product SET product_amount = @product_amount, product_cost = @product_cost, product_name = @product_name WHERE product_id = @product_id", conn);
+                        cmdUpdate.Parameters.AddWithValue("@product_amount", line.ProductAmount);
+                        cmdUpdate.Parameters.AddWithValue("@product_cost", line.ProductCost);
+                        cmdUpdate.Parameters.AddWithValue("@product_name", line.ProductName);
+                        cmdUpdate.Parameters.AddWithValue("@product_id", line.ProductId);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
                 }
+            }
+        }
+
+        public void DeleteDetails(int selected)
+        {
+            using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
+            {
+                conn.Open();
+
+                MySqlCommand cmdDel = new MySqlCommand($"DELETE FROM product WHERE product_id = {selected}", conn);
+                cmdDel.ExecuteNonQuery();
             }
         }
 
@@ -425,6 +454,5 @@ namespace LaskutusSovellus
             MySqlCommand cmdObj = new(command, connObj);
             return cmdObj;
         }
-       
     }
 }

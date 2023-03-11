@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,17 +69,35 @@ namespace LaskutusSovellus
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            // Tämä nappi tallentaa ainoastaan Invoice luokan tietoja
+            // Tämä nappi tallentaa Invoice ja Details muokatut tiedot
             var invoce = (Invoice)DataContext;                                      // Haetaan DataContect Invoice muodossa
             repoObj.UpdateInvoice(invoce);                                          // Tehdään päivitys tietokantaan
 
             repoObj.UpdateDetails(invoce);                                          // UUSi feature, päivittää laskun detailsit
 
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
             holderObj.Invoices = repoObj.GetInvoices();                             // Haetaan laskun tiedot uudestaan
             holderObj.Invoices[Selected].Details = repoObj.GetDetails(Selected);    // Haetaan kaikki laskun lisätiedot
 
             DataContext = holderObj.Invoices[Selected];                             // päivitetään DataContext uusimmilla tiedoilla
             DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // päivitetään myös laskun lisätiedot
+        }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            // Toimii kunhan oikea rivi on valittu
+
+            int selected = DtgLaskutusView.SelectedIndex;           // tämän avulla pitäisi estää poistonapin toiminta jos riviä ei ole valittu
+
+            var re = (ContractDetails)DtgLaskutusView.SelectedItem; // Hawetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
+
+            repoObj.DeleteDetails(re.ProductId);
+
+            UpdateView();
         }
     }
 }
