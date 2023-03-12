@@ -20,7 +20,7 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding Invoices}" AutoGenerateColumns="False" x:Name="DtgMain">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Tilaaja" Width="*" Binding="{Binding AddressBiller}"/>
+                <DataGridTextColumn Header="Tilaaja" Width="*" Binding="{Binding AddressDelivery}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="0">

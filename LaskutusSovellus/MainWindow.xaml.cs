@@ -23,13 +23,14 @@ TO_DO
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
-MainWidow uuden laskun lisääminen
+
 
 
 
 
 IN_PROGRESS
 LaskutusView Details kokonaishinta
+MainWidow uuden laskun lisääminen
 
 DONE
 UI

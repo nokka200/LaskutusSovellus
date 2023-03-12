@@ -11,14 +11,14 @@
         <local:Invoice/>
     </Window.DataContext>
     
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
         <StackPanel>
@@ -44,8 +44,12 @@
                 <Button x:Name="BtnSave" Margin="5,0,0,0" Content="Tallenna" Width="47" Click="BtnSave_Click"/>
                 <Button x:Name="BtnDelete" Margin="5,0,0,0" Content="Poista" Width="47" Click="BtnDelete_Click"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Kokonaishinta" Width="150"/>
+                <TextBox Text="" Width="150" IsReadOnly="True"/>
+            </StackPanel>
 
-            <TextBox Height="61" Text="{Binding ExtraInformation}" TextWrapping="Wrap"/>
+            <TextBox Height="73" Text="{Binding ExtraInformation}" TextWrapping="Wrap"/>
         </StackPanel>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Details}" AutoGenerateColumns="False" x:Name="DtgLaskutusView">
             <DataGrid.Columns>
