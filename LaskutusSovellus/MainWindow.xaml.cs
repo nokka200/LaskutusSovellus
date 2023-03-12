@@ -23,14 +23,8 @@ TO_DO
 Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
 Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
-
-
-
-
-
 IN_PROGRESS
 LaskutusView Details kokonaishinta
-MainWidow uuden laskun lisääminen
 
 DONE
 UI
@@ -48,6 +42,7 @@ LaskutusView Tallennus napin toiminta Invoice.Details vanhojen tietojen päivity
 LaskutusView Details rivin poistaminen
 
 MainWindow yhden laskun poisto 
+MainWidow uuden laskun lisääminen
 
 
 */

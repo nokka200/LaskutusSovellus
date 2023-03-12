@@ -91,7 +91,7 @@ namespace LaskutusSovellus
         {
             // Toimii kunhan oikea rivi on valittu
 
-            int selected = DtgLaskutusView.SelectedIndex;           // tämän avulla pitäisi estää poistonapin toiminta jos riviä ei ole valittu
+            int selected = DtgLaskutusView.SelectedIndex;           // TODO tämän avulla pitäisi estää poistonapin toiminta jos riviä ei ole valittu
 
             var re = (ContractDetails)DtgLaskutusView.SelectedItem; // Hawetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
 
