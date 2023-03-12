@@ -151,6 +151,7 @@ namespace LaskutusSovellus
         public DateTime DateBill { get; set; }
         public DateTime DateDue { get; set; }
         public string? ExtraInformation { get; set; }
+        public double ProductTotal { get; set; }
 
         public int TimeTillDueDate { get; set; } = 14;
         public ObservableCollection<ContractDetails> Details { get; set; }
@@ -173,6 +174,7 @@ namespace LaskutusSovellus
         public string? ProductName { get; set; }
         public int ProductAmount { get; set; }
         public double ProductCost { get; set; }
+        
 
         public ContractDetails()
         {

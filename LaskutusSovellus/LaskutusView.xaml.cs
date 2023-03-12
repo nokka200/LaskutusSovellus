@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -39,11 +40,26 @@ namespace LaskutusSovellus
             CheckSelected(holderObj.Invoices.Count);
 
             holderObj.Invoices[Selected].Details = repoObj.GetDetails(Selected);    // Haetaan kaikki laskun lisätiedot
+            holderObj.Invoices[Selected].ProductTotal = GetDetailsSum(holderObj.Invoices[Selected].Details); // Lisätään Product total
 
             DataContext = holderObj.Invoices[Selected];                             // Asetetaan haettu lasku tiedosidonnan kohteeksi
             DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // haetaan datagridin lähde oikeaksi ContractDetail olioksi
             // Tämä vaikuttaa ouodolta, tarkkaile jos parempi vaihtoehto NOTICE
 
+        }
+
+        private double GetDetailsSum(ObservableCollection<ContractDetails> details)
+        {
+            // TODO
+            // Tätä voitaisiin käyttää Details kokonais summan hakuun
+            double total = 0;
+
+            foreach(var item in details)
+            {
+                total += item.ProductCost;
+            }
+
+            return total;
         }
 
         private void CheckSelected(int max)
@@ -82,9 +98,11 @@ namespace LaskutusSovellus
         {
             holderObj.Invoices = repoObj.GetInvoices();                             // Haetaan laskun tiedot uudestaan
             holderObj.Invoices[Selected].Details = repoObj.GetDetails(Selected);    // Haetaan kaikki laskun lisätiedot
+            holderObj.Invoices[Selected].ProductTotal = GetDetailsSum(holderObj.Invoices[Selected].Details); // Lisätään Product total
 
             DataContext = holderObj.Invoices[Selected];                             // päivitetään DataContext uusimmilla tiedoilla
             DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // päivitetään myös laskun lisätiedot
+
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
