@@ -20,7 +20,7 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding Invoices}" AutoGenerateColumns="False" x:Name="DtgMain">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Tilaaja" Width="*" Binding="{Binding AddressDelivery}"/>
+                <DataGridTextColumn Header="Tilaaja" IsReadOnly="True" Width="*" Binding="{Binding AddressDelivery}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="0">
@@ -32,8 +32,9 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Click="Btn_OpenInformationWindow" Content="Avaa" Grid.Row="1" Margin="5"/>
-            <Button Content="Poista" Grid.Column="1" Grid.Row="1" Margin="5" Click="Btn_DeleteInformationWindow"/>
+            <Button Click="Btn_OpenInformationWindow" Content="Avaa" Grid.Row="0" Margin="5"/>
+            <Button Content="Poista" Grid.Column="1" Grid.Row="0" Margin="5" Click="Btn_DeleteInformationWindow"/>
+            <Button Content="Lisää" Grid.Row="1" Margin="5" Click="Btn_SaveNewInvoice"/>
         </Grid>
 
         

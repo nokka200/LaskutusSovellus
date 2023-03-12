@@ -98,7 +98,13 @@ namespace LaskutusSovellus
             int re = DtgMain.SelectedIndex;
 
             LaskutusView laskutusView = new(re);
-            laskutusView.ShowDialog();
+            bool? showDialogRe = laskutusView.ShowDialog();
+
+            if (!showDialogRe == true)
+            {
+                UpdateMainWindow();
+            }
+            
         }
 
         private void Btn_DeleteInformationWindow(object sender, RoutedEventArgs e)
@@ -108,10 +114,22 @@ namespace LaskutusSovellus
             repoObj.DeleteInvoice(re.Id);
 
             // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
+            UpdateMainWindow();
+            // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+        }
+
+        private void UpdateMainWindow()
+        {
             holderObj.Invoices = repoObj.GetInvoices();
             DataContext = holderObj;
             DtgMain.ItemsSource = holderObj.Invoices;
-            // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+        }
+
+        private void Btn_SaveNewInvoice(object sender, RoutedEventArgs e)
+        {
+            // TODO Tämä nappi tallentaa uuden laskun järjestelmään
+            repoObj.AddInvoice();
+            UpdateMainWindow();
         }
     }
 
@@ -438,6 +456,20 @@ namespace LaskutusSovellus
                         cmdUpdate.ExecuteNonQuery();
                     }
                 }
+            }
+        }
+
+        public void AddInvoice()
+        {
+            // Päivittää ja lisää MainWindow uuden laskun
+            using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
+            {
+                Invoice tempObj = new();
+                conn.Open();
+                MySqlCommand cmdAddInvoice = new MySqlCommand("INSERT INTO invoice (address_delivery, date_bill, date_due) VALUES('-', @date_bill, @date_due)", conn);
+                cmdAddInvoice.Parameters.AddWithValue("@date_bill", tempObj.DateBill);
+                cmdAddInvoice.Parameters.AddWithValue("@date_due", tempObj.DateDue);
+                cmdAddInvoice.ExecuteNonQuery();
             }
         }
 
