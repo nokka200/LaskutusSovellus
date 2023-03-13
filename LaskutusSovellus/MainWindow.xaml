@@ -13,17 +13,18 @@
     
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Invoices}" AutoGenerateColumns="False" x:Name="DtgMain">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Invoices}" AutoGenerateColumns="False" x:Name="DtgMain">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Tilaaja" IsReadOnly="True" Width="*" Binding="{Binding AddressDelivery}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -35,8 +36,13 @@
             <Button Click="Btn_OpenInformationWindow" Content="Avaa" Grid.Row="0" Margin="5"/>
             <Button Content="Poista" Grid.Column="1" Grid.Row="0" Margin="5" Click="Btn_DeleteInformationWindow"/>
             <Button Content="Lisää" Grid.Row="1" Margin="5" Click="Btn_SaveNewInvoice"/>
+            <Button Content="Tuotetiedot" Grid.Row="1" Grid.Column="1" Margin="5" Click="Btn_OpenAllProducts"/>
         </Grid>
 
-        
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Close" Click="MenClose"/>
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>

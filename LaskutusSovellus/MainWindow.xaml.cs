@@ -1,4 +1,5 @@
-﻿using MySqlConnector;
+﻿using Microsoft.VisualBasic;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,11 +21,9 @@ using System.Windows.Shapes;
 
 TO_DO
 
-Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
-Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
 
 IN_PROGRESS
-LaskutusView Details kokonaishinta
+
 
 DONE
 UI
@@ -34,15 +33,24 @@ Ui Poisto napin lisääminen LaskutusView
 Kaikkien laskutietojen hakeminen ja listaaminen
 Kaikkien tuotetietojen hakeminen listaaminen
 Kaikkien laskujen lisätietojen hakeminen ja listaaminen
+Kaikkien tuotetietojen (Product) taulun tietojen hakeminen
 Tietokannan tyhjennäs ja luonti kun ohjelma käynnistyy
 
 LaskutusView Tallennus napin toiminta Invoice tietojen osalta
 LaskutusView Tallennus napin toiminta Invoice.Details uusien tietojen osalta
 LaskutusView Tallennus napin toiminta Invoice.Details vanhojen tietojen päivitys
 LaskutusView Details rivin poistaminen
+LaskutusView Details kokonaishinta
 
 MainWindow yhden laskun poisto 
 MainWidow uuden laskun lisääminen
+
+Yksittäisen laskun tietojen ylläpito (lisäys, muutos poisti)
+Yksittäisen tuotteen tietojen ylläpito (lisäys, muutos poisti)
+
+Bonus
+MENU
+Close toiminto lisätty
 
 
 */
@@ -122,9 +130,20 @@ namespace LaskutusSovellus
 
         private void Btn_SaveNewInvoice(object sender, RoutedEventArgs e)
         {
-            // TODO Tämä nappi tallentaa uuden laskun järjestelmään
             repoObj.AddInvoice();
             UpdateMainWindow();
+        }
+
+        private void Btn_OpenAllProducts(object sender, RoutedEventArgs e)
+        {
+            // Avaa kaikki kaikki tuotetiedot eli Product table
+            ProductView prodWin = new();
+            prodWin.ShowDialog();
+        }
+
+        private void MenClose(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 
@@ -390,6 +409,29 @@ namespace LaskutusSovellus
                     });
                 }
 
+            }
+            return details;
+        }
+
+        public ObservableCollection<ContractDetails> GetAllDetails()
+        {
+            // hakee Product taulusta kaikki tietueet
+            var details = new ObservableCollection<ContractDetails>();
+            using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
+            {
+                var cmdObj = SqlExecuteReader(connObj, "SELECT product_id, product_amount, product_cost, product_name FROM product");
+                var dr = cmdObj.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    details.Add(new ContractDetails
+                    {
+                        ProductId = dr.GetInt32("product_id"),
+                        ProductName = dr.GetString("product_name"),
+                        ProductAmount = dr.GetInt32("product_amount"),
+                        ProductCost = dr.GetDouble("product_cost"),
+                    });
+                }
             }
             return details;
         }
