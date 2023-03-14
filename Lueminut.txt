@@ -1,0 +1,8 @@
+a) Missä kohtaa sovellusta on em. yhteys määritetty
+
+Yhteys löytyy InvoiceRepository.cs riviltä 50 ja 51
+
+b) Muut mahdolliset ohjeet sovelluksen käynnistämiseen (vain jos sovelluksen käynnistäminen vaatii 
+jotain erityistoimenpiteitä
+
+Ei pitäisi olla mitään muita starttaus ongelmia
