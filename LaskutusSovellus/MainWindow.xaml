@@ -40,8 +40,11 @@
         </Grid>
 
         <Menu Grid.Row="0">
-            <MenuItem Header="File">
-                <MenuItem Header="Close" Click="MenClose"/>
+            <MenuItem Header="Tiedostot">
+                <MenuItem Header="Sulje" Click="MenClose"/>
+            </MenuItem>
+            <MenuItem Header="Tiedot">
+                <MenuItem Header="Manual..." Click="OpenManual"/>
             </MenuItem>
         </Menu>
     </Grid>

@@ -119,6 +119,7 @@ namespace LaskutusSovellus
 
         private void UpdateMainWindow()
         {
+            // päivittää ikkunan tiedot
             holderObj.Invoices = repoObj.GetInvoices();
             DataContext = holderObj;
             DtgMain.ItemsSource = holderObj.Invoices;
@@ -126,6 +127,7 @@ namespace LaskutusSovellus
 
         private void Btn_SaveNewInvoice(object sender, RoutedEventArgs e)
         {
+            // lisää uuden tyhjän laskun
             repoObj.AddInvoice();
             UpdateMainWindow();
         }
@@ -139,7 +141,15 @@ namespace LaskutusSovellus
 
         private void MenClose(object sender, RoutedEventArgs e)
         {
+            // sulkee sovelluksen
             Close();
+        }
+
+        private void OpenManual(object sender, RoutedEventArgs e)
+        {
+            ManualView manView = new();
+            manView.ShowDialog();
+
         }
     }
 }
