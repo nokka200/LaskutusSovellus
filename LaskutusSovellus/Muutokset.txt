@@ -1,0 +1,3 @@
+﻿Yksikköhinta on aina kiinteä ja laskulla (Laskurivillä) on määrä
+
+laskun_rivit pöytään rivi product_unit_amount
