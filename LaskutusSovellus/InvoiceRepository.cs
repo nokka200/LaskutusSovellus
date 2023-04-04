@@ -218,7 +218,6 @@ namespace LaskutusSovellus
                     });
                 }
             }
-
             return invoices;
         }
 
@@ -333,6 +332,8 @@ namespace LaskutusSovellus
                         cmdUpdate.Parameters.AddWithValue("@product_name", line.ProductName);
                         cmdUpdate.Parameters.AddWithValue("@product_id", line.ProductId);
                         cmdUpdate.ExecuteNonQuery();
+
+                        // TODO mahdollisesti toimen update käsky koska määrä on nyt laskun_rivit taulussa!
                     }
                 }
             }
