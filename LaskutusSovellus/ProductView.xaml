@@ -16,7 +16,7 @@
                 <DataGridTextColumn Header="Id" Width="45" Binding="{Binding ProductId}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Tuote" Width="75" Binding="{Binding ProductName}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Määrä" Width="45" Binding="{Binding ProductAmount}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Hinta" Width="*" Binding="{Binding ProductCost}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Yksikkö hinta" Width="*" Binding="{Binding ProductUnitCost}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

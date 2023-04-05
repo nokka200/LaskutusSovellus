@@ -48,11 +48,11 @@ namespace LaskutusSovellus
     {
 
         const string LOCAL_CONNECT = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1;";
-        const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=projektityo_nn_2206189;";
+        const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=projektityo2_nn_2206189;";
 
         const string SELECT_ALL_INVOICE = "SELECT * FROM invoice";
-        const string DROP_DB = "DROP DATABASE IF EXISTS projektityo_nn_2206189";
-        const string CREATE_DB = "CREATE DATABASE IF NOT EXISTS projektityo_nn_2206189";
+        const string DROP_DB = "DROP DATABASE IF EXISTS projektityo2_nn_2206189";
+        const string CREATE_DB = "CREATE DATABASE IF NOT EXISTS projektityo2_nn_2206189";
 
         const string CREATE_TABLE_INVOICE = "CREATE TABLE invoice(" +
                                                 "invoice_id INT NOT NULL AUTO_INCREMENT," +
@@ -64,12 +64,12 @@ namespace LaskutusSovellus
                                                 "PRIMARY KEY (invoice_id))";
         const string CREATE_TABLE_PRODUCT = "CREATE TABLE product(" +
                                                 "product_id INT NOT NULL AUTO_INCREMENT," +
-                                                "product_amount INT NOT NULL DEFAULT 0," +
-                                                "product_cost DECIMAL(10,2) NOT NULL DEFAULT 0," +
+                                                "product_unit_cost DECIMAL(10,2) NOT NULL DEFAULT 0," +
                                                 "product_name VARCHAR(25) NOT NULL DEFAULT '-'," +
                                                 "PRIMARY KEY (product_id))";
         const string CREATE_TABLE_LASKUN_RIVIT = "CREATE TABLE laskun_rivit(" +
                                                     "rivi_id INT NOT NULL AUTO_INCREMENT," +
+                                                    "product_amount INT NOT NULL DEFAULT 0," +
                                                     "invoice_id INT NOT NULL," +
                                                     "product_id INT NOT NULL," +
                                                     "PRIMARY KEY (rivi_id)," +
@@ -80,14 +80,14 @@ namespace LaskutusSovellus
         const string INSERT_DEFAULT_INVOICE = "INSERT INTO invoice (address_delivery, date_bill, date_due, extra_information)" +
                                                 "VALUES('Puuhala 2', '2023-08-03', '2023-08-17', 'Tällaista')," +
                                                         "('Puuhala 5', '2023-12-08', '2023-12-22', 'Simo')";
-        const string INSERT_DEFAULT_PRODUCT = "INSERT INTO product (product_amount, product_cost, product_name)" +
-                                                "VALUES(50, 5, 'Vasarointi')," +
-                                                "(100, 0.5, 'Naulat')," +
-                                                "(1, 500, 'Putkiremontti')";
-        const string INSERT_DEFAULT_LASKUN_RIVIT = "INSERT INTO laskun_rivit (invoice_id, product_id)" +
-                                                      "VALUES(1,1)," +
-                                                        "(1,2)," +
-                                                        "(2,3)";
+        const string INSERT_DEFAULT_PRODUCT = "INSERT INTO product (product_unit_cost, product_name)" +
+                                                "VALUES(25, 'Vasarointi')," +
+                                                "(1, 'Naulat')," +
+                                                "(500, 'Putkiremontti')";
+        const string INSERT_DEFAULT_LASKUN_RIVIT = "INSERT INTO laskun_rivit (product_amount, invoice_id, product_id)" +
+                                                      "VALUES(8, 1,1)," +
+                                                        "(50, 1,2)," +
+                                                        "(1, 2,3)";
 
         /// <summary>
         /// Tiputtaa ja luo tietokantaa projektin
@@ -234,7 +234,10 @@ namespace LaskutusSovellus
             var details = new ObservableCollection<ContractDetails>();
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
             {
-                var cmdObj = SqlExecuteReader(connObj, $"SELECT product_id, product_amount, product_cost, product_name FROM product WHERE product_id IN (SELECT product_id FROM laskun_rivit WHERE invoice_id = {keyValue})");
+                var cmdObj = SqlExecuteReader(connObj, $"SELECT p.product_id, p.product_unit_cost, p.product_name, lr.product_amount " +
+                    $"FROM product p " +
+                    $"JOIN laskun_rivit lr ON p.product_id = lr.product_id " +
+                    $"WHERE p.product_id IN (SELECT product_id FROM laskun_rivit WHERE invoice_id = {keyValue})");
                 var dr = cmdObj.ExecuteReader();
 
                 while (dr.Read())
@@ -244,7 +247,7 @@ namespace LaskutusSovellus
                         ProductId = dr.GetInt32("product_id"),
                         ProductName = dr.GetString("product_name"),
                         ProductAmount = dr.GetInt32("product_amount"),
-                        ProductCost = dr.GetDouble("product_cost"),
+                        ProductUnitCost = dr.GetDouble("product_unit_cost"),
                     });
                 }
 
@@ -258,7 +261,7 @@ namespace LaskutusSovellus
             var details = new ObservableCollection<ContractDetails>();
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
             {
-                var cmdObj = SqlExecuteReader(connObj, "SELECT product_id, product_amount, product_cost, product_name FROM product");
+                var cmdObj = SqlExecuteReader(connObj, "SELECT p.product_id, p.product_unit_cost, p.product_name, lr.product_amount FROM product p JOIN laskun_rivit lr ON p.product_id = lr.product_id");
                 var dr = cmdObj.ExecuteReader();
 
                 while (dr.Read())
@@ -268,13 +271,13 @@ namespace LaskutusSovellus
                         ProductId = dr.GetInt32("product_id"),
                         ProductName = dr.GetString("product_name"),
                         ProductAmount = dr.GetInt32("product_amount"),
-                        ProductCost = dr.GetDouble("product_cost"),
+                        ProductUnitCost = dr.GetDouble("product_unit_cost"),
                     });
                 }
             }
             return details;
         }
-
+        
         public void UpdateInvoice(Invoice invoiceToUpdate)
         {
             // TODO Update to database päivämäärien muutos
@@ -292,6 +295,7 @@ namespace LaskutusSovellus
             }
         }
 
+        // JATKA tästä!
         public void UpdateDetails(Invoice invoiceToUpdate)
         {
             // Päivittää Invoice Details osion
@@ -305,9 +309,8 @@ namespace LaskutusSovellus
                     if(line.ProductId == 0)
                     {
                         // Tämä luo uuden rivin Product pöytään
-                        MySqlCommand cmdIns = new MySqlCommand("INSERT INTO product (product_amount, product_cost, product_name) VALUES(@product_amount, @product_cost, @product_name)", conn);
-                        cmdIns.Parameters.AddWithValue("@product_amount", line.ProductAmount);
-                        cmdIns.Parameters.AddWithValue("@product_cost", line.ProductCost);
+                        MySqlCommand cmdIns = new MySqlCommand("INSERT INTO product (product_unit_cost, product_name) VALUES(@product_unit_cost, @product_name)", conn);
+                        cmdIns.Parameters.AddWithValue("@product_unit_cost", line.ProductUnitCost);
                         cmdIns.Parameters.AddWithValue("@product_name", line.ProductName);
                         cmdIns.ExecuteNonQuery();
                         Debug.WriteLine(line.ProductId);
@@ -318,7 +321,8 @@ namespace LaskutusSovellus
 
                         // HUOM tämä ehkä turhaa jos ON UPDATE CASCADE mahdollisesti ajaa samanaa asiaa
                         // Tämä yhdistää luodun productin avoinna olevaan Invoice laskuun
-                        MySqlCommand cmdInsLaskunRivit = new MySqlCommand("INSERT INTO laskun_rivit (invoice_id, product_id) VALUES(@invoice_id, @product_id)", conn);
+                        MySqlCommand cmdInsLaskunRivit = new MySqlCommand("INSERT INTO laskun_rivit (product_amount, invoice_id, product_id) VALUES(@product_amount, @invoice_id, @product_id)", conn);
+                        cmdInsLaskunRivit.Parameters.AddWithValue("@product_amount", line.ProductAmount);
                         cmdInsLaskunRivit.Parameters.AddWithValue("@invoice_id", invoiceToUpdate.Id);
                         cmdInsLaskunRivit.Parameters.AddWithValue("@product_id", re);            
                         cmdInsLaskunRivit.ExecuteNonQuery();
@@ -326,13 +330,17 @@ namespace LaskutusSovellus
                     else
                     {
                         // jos ei ole uusi rivi, päivitetään vanhat HUOM rivit jotka eivät kuulu avattuun laskuun!
-                        MySqlCommand cmdUpdate = new MySqlCommand("UPDATE product SET product_amount = @product_amount, product_cost = @product_cost, product_name = @product_name WHERE product_id = @product_id", conn);
-                        cmdUpdate.Parameters.AddWithValue("@product_amount", line.ProductAmount);
-                        cmdUpdate.Parameters.AddWithValue("@product_cost", line.ProductCost);
+                        MySqlCommand cmdUpdate = new MySqlCommand("UPDATE product SET product_unit_cost = @product_unit_cost, product_name = @product_name WHERE product_id = @product_id", conn);
+                        cmdUpdate.Parameters.AddWithValue("@product_unit_cost", line.ProductUnitCost);
                         cmdUpdate.Parameters.AddWithValue("@product_name", line.ProductName);
                         cmdUpdate.Parameters.AddWithValue("@product_id", line.ProductId);
                         cmdUpdate.ExecuteNonQuery();
 
+                        
+                        MySqlCommand cmdUpdateRivi = new MySqlCommand("UPDATE laskun_rivit SET product_amount = @product_amount WHERE product_id = @product_id", conn);
+                        cmdUpdateRivi.Parameters.AddWithValue("@product_amount", line.ProductAmount);
+                        cmdUpdateRivi.Parameters.AddWithValue("@product_id", line.ProductId);
+                        cmdUpdateRivi.ExecuteNonQuery();
                         // TODO mahdollisesti toimen update käsky koska määrä on nyt laskun_rivit taulussa!
                     }
                 }

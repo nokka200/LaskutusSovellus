@@ -56,7 +56,7 @@ namespace LaskutusSovellus
 
             foreach(var item in details)
             {
-                total += item.ProductCost;
+                total += item.ProductUnitCost * item.ProductAmount;
             }
 
             return total;
