@@ -95,6 +95,11 @@ namespace LaskutusSovellus
         {
             // Otetaan valittu rivi talteen josta avataan lisätiedot
             int re = DtgMain.SelectedIndex;
+            if(re == -1)
+            {
+                MessageBox.Show("Riviä ei ole valittu");
+                return;
+            }
 
             LaskutusView laskutusView = new(re);
             bool? showDialogRe = laskutusView.ShowDialog();
@@ -109,12 +114,26 @@ namespace LaskutusSovellus
         private void Btn_DeleteInformationWindow(object sender, RoutedEventArgs e)
         {
             // Poistaa valitun rivin
+            
             var re = (Invoice)DtgMain.SelectedItem;
-            repoObj.DeleteInvoice(re.Id);
+            if(re != null)
+            {
+                var check = MessageBox.Show("Halutako varmasti poistaa?", "Poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (check == MessageBoxResult.Yes)
+                {
+                    repoObj.DeleteInvoice(re.Id);
+                    // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
+                    UpdateMainWindow();
+                    // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+                }
 
-            // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
-            UpdateMainWindow();
-            // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+            } else
+            {
+                MessageBox.Show("Valitse lasku joka poistetaan");
+            }
+
+
+
         }
 
         private void UpdateMainWindow()

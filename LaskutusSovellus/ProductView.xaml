@@ -13,7 +13,8 @@
         </Grid.ColumnDefinitions>
         <DataGrid ItemsSource="{Binding Details}" AutoGenerateColumns="False" x:Name="DtgProduct" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Width="45" Binding="{Binding ProductId}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Tuote Id" Width="65" Binding="{Binding ProductId}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Lasku Id" Width="65" Binding="{Binding InvoiceId}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Tuote" Width="75" Binding="{Binding ProductName}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Määrä" Width="45" Binding="{Binding ProductAmount}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Yksikkö hinta" Width="*" Binding="{Binding ProductUnitCost}" IsReadOnly="True"/>

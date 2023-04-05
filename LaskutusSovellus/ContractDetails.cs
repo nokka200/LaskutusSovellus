@@ -37,6 +37,9 @@ Close toiminto lisätty
 */
 namespace LaskutusSovellus
 {
+    /// <summary>
+    /// Tämä luokka sisältää laskun lisätiedot
+    /// </summary>
     public class ContractDetails
     {
         public int ProductId { get; set; }
@@ -44,7 +47,8 @@ namespace LaskutusSovellus
         public int ProductAmount { get; set; }
         public double ProductUnitCost { get; set; }
         public double ProductCost { get; set; }
-        
+        public int InvoiceId { get; set; }
+
 
         public ContractDetails()
         {

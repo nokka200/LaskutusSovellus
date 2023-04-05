@@ -42,7 +42,8 @@ Close toiminto lisätty
 namespace LaskutusSovellus
 {
     /// <summary>
-    /// Hallinoi yhteyksiä tietokantaan
+    /// Tämä luokka kontrolloi yhteydet ja pyynnöt MariaDB tietokantaan, Luokkaan on oletuksena asetettu
+    /// vakioihin tietokannanluonti ja joitakin komentoja.
     /// </summary>
     public class InvoiceRepository
     {
@@ -195,7 +196,7 @@ namespace LaskutusSovellus
         /// <summary>
         /// Hakee kaikki laskut
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Listan laskuista</returns>
         public ObservableCollection<Invoice> GetInvoices()
         {
             var invoices = new ObservableCollection<Invoice>();
@@ -222,10 +223,10 @@ namespace LaskutusSovellus
         }
 
         /// <summary>
-        /// Hakee Laskun Details it
+        /// Hakee valitun laskun lisätiedot.
         /// </summary>
-        /// <param name="keyValue">Minkä laskun haetaan</param>
-        /// <returns></returns>
+        /// <param name="keyValue">Mikä lasku haetaan</param>
+        /// <returns>Listan laskun yksityiskohdista</returns>
         public ObservableCollection<ContractDetails> GetDetails(int keyValue)
         {
             // Hakee tiedot Invoice.Details property olioihin eli muodostaa ContractDetails oliot tietokannan perusteella
@@ -255,13 +256,17 @@ namespace LaskutusSovellus
             return details;
         }
 
+        /// <summary>
+        /// Hakee kaikkien laskujen tiedot tietokannasta
+        /// </summary>
+        /// <returns>Listan kaikkien laskujen yksityiskohdat</returns>
         public ObservableCollection<ContractDetails> GetAllDetails()
         {
             // hakee Product taulusta kaikki tietueet
             var details = new ObservableCollection<ContractDetails>();
             using (MySqlConnection connObj = new(LOCAL_CONNECT_DB))
             {
-                var cmdObj = SqlExecuteReader(connObj, "SELECT p.product_id, p.product_unit_cost, p.product_name, lr.product_amount FROM product p JOIN laskun_rivit lr ON p.product_id = lr.product_id");
+                var cmdObj = SqlExecuteReader(connObj, "SELECT p.product_id, p.product_unit_cost, p.product_name, lr.product_amount, lr.invoice_id FROM product p JOIN laskun_rivit lr ON p.product_id = lr.product_id");
                 var dr = cmdObj.ExecuteReader();
 
                 while (dr.Read())
@@ -272,16 +277,19 @@ namespace LaskutusSovellus
                         ProductName = dr.GetString("product_name"),
                         ProductAmount = dr.GetInt32("product_amount"),
                         ProductUnitCost = dr.GetDouble("product_unit_cost"),
+                        InvoiceId = dr.GetInt32("invoice_id"),
                     });
                 }
             }
             return details;
         }
         
+        /// <summary>
+        /// Päivittää laskun perustietoja toimitusosoite ja lisätiedot 
+        /// </summary>
+        /// <param name="invoiceToUpdate">Lasku jota päivitetään</param>
         public void UpdateInvoice(Invoice invoiceToUpdate)
         {
-            // TODO Update to database päivämäärien muutos
-            // tällä hetkellä päivittää kaikki muut paitsi ID ja päivämäärät
             using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
             {
                 conn.Open();
@@ -295,7 +303,10 @@ namespace LaskutusSovellus
             }
         }
 
-        // JATKA tästä!
+        /// <summary>
+        /// Päivittää laskun lisätiedot, tarkastaa onko rivi 0 vai ei
+        /// </summary>
+        /// <param name="invoiceToUpdate">Lasku jonka lisätiedot päivitetään</param>
         public void UpdateDetails(Invoice invoiceToUpdate)
         {
             // Päivittää Invoice Details osion
@@ -347,6 +358,9 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Lisää uuden laskun
+        /// </summary>
         public void AddInvoice()
         {
             // Päivittää ja lisää MainWindow uuden laskun
@@ -361,6 +375,10 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Poistaa valitun lisätiedont
+        /// </summary>
+        /// <param name="selected">valittu lisätieto</param>
         public void DeleteDetails(int selected)
         {
             using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))
@@ -372,6 +390,10 @@ namespace LaskutusSovellus
             }
         }
 
+        /// <summary>
+        /// Poistaa valitun laskun
+        /// </summary>
+        /// <param name="selected">Lasku joka poistetaan</param>
         public void DeleteInvoice(int selected)
         {
             using (MySqlConnection conn = new MySqlConnection(LOCAL_CONNECT_DB))

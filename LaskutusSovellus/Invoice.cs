@@ -40,6 +40,9 @@ Close toiminto lisätty
 */
 namespace LaskutusSovellus
 {
+    /// <summary>
+    /// Tämä luokka sisältää kaikki laskun tiedot, se koostuu propertyistä ja laskun lisätietolistasta "Details" jossa on kaikki laskulla olevat lisätiedot.
+    /// </summary>
     public class Invoice
     {
         // Laskun tiedot haetaan databindingilla MainWindowiin Id ja AddressBiller loput haetaan LaskutusView ikkunaan

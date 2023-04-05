@@ -40,7 +40,7 @@ Close toiminto lisätty
 namespace LaskutusSovellus
 {
     /// <summary>
-    /// Pitää tiedot kaikista laskuista
+    /// Luokka joka on ainoastaan lista kaikille Invoice luokille, käytetään tietosidonnassa.
     /// </summary>
     public class InvoiceHolder
     {

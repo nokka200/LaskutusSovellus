@@ -6,3 +6,68 @@ b) Muut mahdolliset ohjeet sovelluksen käynnistämiseen (vain jos sovelluksen k
 jotain erityistoimenpiteitä
 
 Ei pitäisi olla mitään muita starttaus ongelmia
+
+
+Ohjelman kuvaus
+
+Ohjelma on jaettu seuraaviin käyttöliittymiin
+
+MainWindow, LaskutusView, ManualView ja ProductView
+---
+
+MainWindow
+
+Tässä käyttöliittymässä näkyy kaikki tehdyt laskut eriteltynä riveillä. 
+Laskun lisätiedot saa esille valitsemalla laskun ja painamalla "Avaa", oletuksena avaa 
+ensimmäisen laskun.
+
+"Poista" nappula poistaa valitun laskun, jos mitään laskua ei ole valittu ohjelma ilmoittaa tästä.
+Ohjelma myös varmistaa käyttäjältä haluaako hän poistaa valitun laskun.
+
+"Lisää" nappula lisää uuden tyhjän (oletustiedoilla täytetyn) laskun riville.
+
+"Tuotetiedot" näyttää kaikki lisätuotteet / lisäpalvelut mitä laskuille on syötetty.
+
+Menu
+
+Tiedostot -> Sulje
+Sulkee ohjelman
+
+Tiedot -> Manual... Avaa ManualView käyttöliittymän
+
+LaskutusView
+
+Tässä käyttöliittymässä on valitun laskun lisätiedot.
+Tietoja pystyy päivittämään painamalla "Tallenna" nappulaa tai
+poistamalla painamalla "Poista" nappulaa. Laskulle on määritelty lisätuotteiden / palvelujen
+Id, nimi, määrä ja yksikköhinta. Kokonaishinta lasketaan Määrä * yksikkö hinta.
+
+ManualView
+
+Löytyy yksinkertainen manuaali näppäimien toiminnasta.
+
+ProdcutView
+
+Näyttää eriteltynä kaikkien laskujen lisätiedot.
+
+---
+
+Ohjelmasta löytyy seuraavat luokat
+
+ContractDetails, Invoice, InvoiceHolder, InvoiceRepository
+---
+ContractDetails
+Tämä luokka sisältää kaikki laskun (Invoice) lisätiedot. 
+Luokasta löytyy myös poikeuksellisesti InvoiceId property jota käytetään "Tuotetieto" ikkunassa
+selvittääkseen mille laskulle mikäkin palvelu kuuluu.
+
+Invoice
+Tämä luokka on lasku, sisältää listan ContractDetails jossa on laskun lisätiedot.
+Luokassa on oletuksena asetettu 14pv laskujen eräpäiviksi.
+
+InvoiceHolder
+Luokka joka on ainoastaan lista kaikille Invoice luokille, käytetään tietosidonnassa.
+
+InvoiceHolder
+Tämä luokka kontrolloi yhteydet ja pyynnöt MariaDB tietokantaan, Luokkaan on oletuksena asetettu
+vakioihin tietokannanluonti ja joitakin komentoja.
