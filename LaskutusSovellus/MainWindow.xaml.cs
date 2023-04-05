@@ -93,11 +93,12 @@ namespace LaskutusSovellus
 
         private void Btn_OpenInformationWindow(object sender, RoutedEventArgs e)
         {
-            // Otetaan valittu rivi talteen josta avataan lisätiedot
+            // Otetaan valittu rivi talteen josta avataan lisätiedot, jos valittuna on tyhjä rivi (uusi lasku) valitaan edellinen lasku.
             int re = DtgMain.SelectedIndex;
             if(re == -1)
             {
                 MessageBox.Show("Riviä ei ole valittu");
+                e.Handled = true;
                 return;
             }
 
@@ -108,7 +109,7 @@ namespace LaskutusSovellus
             {
                 UpdateMainWindow();
             }
-            
+            e.Handled = true;
         }
 
         private void Btn_DeleteInformationWindow(object sender, RoutedEventArgs e)

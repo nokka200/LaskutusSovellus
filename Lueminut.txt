@@ -26,7 +26,8 @@ Ohjelma myös varmistaa käyttäjältä haluaako hän poistaa valitun laskun.
 
 "Lisää" nappula lisää uuden tyhjän (oletustiedoilla täytetyn) laskun riville.
 
-"Tuotetiedot" näyttää kaikki lisätuotteet / lisäpalvelut mitä laskuille on syötetty.
+"Tuotetiedot" näyttää kaikki lisätuotteet / lisäpalvelut mitä laskuille on syötetty, jos valittuna on
+uusi tyhjä rivi, avataan edellinen lasku.
 
 Menu
 
