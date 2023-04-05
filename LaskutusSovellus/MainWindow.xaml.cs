@@ -114,26 +114,31 @@ namespace LaskutusSovellus
         private void Btn_DeleteInformationWindow(object sender, RoutedEventArgs e)
         {
             // Poistaa valitun rivin
-            
-            var re = (Invoice)DtgMain.SelectedItem;
-            if(re != null)
+            Invoice re;
+            try
             {
-                var check = MessageBox.Show("Halutako varmasti poistaa?", "Poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (check == MessageBoxResult.Yes)
+                re = (Invoice)DtgMain.SelectedItem;
+                if (re != null)
                 {
-                    repoObj.DeleteInvoice(re.Id);
-                    // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
-                    UpdateMainWindow();
-                    // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+                    var check = MessageBox.Show("Halutako varmasti poistaa?", "Poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (check == MessageBoxResult.Yes)
+                    {
+                        repoObj.DeleteInvoice(re.Id);
+                        // poistaa tiedot taulusta mutta ei päivitä käyttöliittymää, liittyy varmaankin DataBindingiin 
+                        UpdateMainWindow();
+                        // tämä kanittaa jotenkin DataContex ei päivitä ruuta ilman että itemSources lisätään tähän
+                    }
+
                 }
-
-            } else
+                else
+                {
+                    MessageBox.Show("Valitse lasku joka poistetaan");
+                }
+            } 
+            catch(System.InvalidCastException)
             {
-                MessageBox.Show("Valitse lasku joka poistetaan");
+                MessageBox.Show("Tyhjä rivi valittu");
             }
-
-
-
         }
 
         private void UpdateMainWindow()
