@@ -107,15 +107,23 @@ namespace LaskutusSovellus
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            // Toimii kunhan oikea rivi on valittu
+            ContractDetails re;
+            try
+            {
+                re = (ContractDetails)DtgLaskutusView.SelectedItem; // Hawetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
+                if(re != null)
+                {
+                    repoObj.DeleteDetails(re.ProductId);
+                    e.Handled = true;
+                    UpdateView();
+                }
+                e.Handled = true;
 
-            int selected = DtgLaskutusView.SelectedIndex;           // TODO tämän avulla pitäisi estää poistonapin toiminta jos riviä ei ole valittu
-
-            var re = (ContractDetails)DtgLaskutusView.SelectedItem; // Hawetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
-
-            repoObj.DeleteDetails(re.ProductId);
-
-            UpdateView();
+            } catch (InvalidCastException)
+            {
+                MessageBox.Show("Valitse poistettava rivi");
+            }
+            e.Handled = true;
         }
     }
 }
