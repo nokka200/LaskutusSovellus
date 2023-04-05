@@ -44,14 +44,10 @@ namespace LaskutusSovellus
 
             DataContext = holderObj.Invoices[Selected];                             // Asetetaan haettu lasku tiedosidonnan kohteeksi
             DtgLaskutusView.ItemsSource = holderObj.Invoices[Selected].Details;     // haetaan datagridin lähde oikeaksi ContractDetail olioksi
-            // Tämä vaikuttaa ouodolta, tarkkaile jos parempi vaihtoehto NOTICE
-
         }
 
         private double GetDetailsSum(ObservableCollection<ContractDetails> details)
         {
-            // TODO
-            // Tätä voitaisiin käyttää Details kokonais summan hakuun
             double total = 0;
 
             foreach(var item in details)
@@ -64,21 +60,12 @@ namespace LaskutusSovellus
 
         private void CheckSelected(int max)
         {
-            // jos ei ole valittu mitään asetetaan 0 arvoski ettei ohjelma kaadu
-            // parannuksena luo uuden laskun, tarvii vielä rakentamista 
             if(Selected == -1)
             {
                 Selected = 0;
             }
             if(Selected == max)
             {
-                /*
-                holderObj.Invoices.Add(new Invoice
-                {
-
-                });
-                // TODO pitäisi lisätä uusi rivi tietokantaan
-                */
                 Selected--;
             }
         }
@@ -112,15 +99,18 @@ namespace LaskutusSovellus
             ContractDetails re;
             try
             {
-                re = (ContractDetails)DtgLaskutusView.SelectedItem; // Hawetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
+                re = (ContractDetails)DtgLaskutusView.SelectedItem; // Haetaan valittu rivi ja muutetaan se ContractDetails että saamme Id numeron
                 if(re != null)
                 {
                     repoObj.DeleteDetails(re.ProductId);
                     e.Handled = true;
                     UpdateView();
                 }
-                e.Handled = true;
-
+                if(re == null)
+                {
+                    MessageBox.Show("Valitse poistettava rivi");
+                    e.Handled = true;
+                }            
             } catch (InvalidCastException)
             {
                 MessageBox.Show("Valitse poistettava rivi");
