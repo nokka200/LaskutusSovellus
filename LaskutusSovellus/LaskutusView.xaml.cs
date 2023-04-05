@@ -91,7 +91,9 @@ namespace LaskutusSovellus
 
             repoObj.UpdateDetails(invoce);                                          // UUSi feature, päivittää laskun detailsit
 
+            MessageBox.Show("Tiedot tallennettu");
             UpdateView();
+            e.Handled = true;
         }
 
         private void UpdateView()
