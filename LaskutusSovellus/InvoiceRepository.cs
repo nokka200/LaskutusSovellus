@@ -10,6 +10,7 @@ namespace LaskutusSovellus
     /// </summary>
     public class InvoiceRepository
     {
+        // HUOM käyttäjä ja salasana poistettu
 
         const string LOCAL_CONNECT = @"Server=127.0.0.1; Port=3306; User ID=; Pwd=;";
         const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=; Pwd=; Database=projektityo2_nn_2206189;";
