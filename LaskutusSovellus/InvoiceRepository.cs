@@ -11,8 +11,8 @@ namespace LaskutusSovellus
     public class InvoiceRepository
     {
 
-        const string LOCAL_CONNECT = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1;";
-        const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=projektityo2_nn_2206189;";
+        const string LOCAL_CONNECT = @"Server=127.0.0.1; Port=3306; User ID=; Pwd=;";
+        const string LOCAL_CONNECT_DB = @"Server=127.0.0.1; Port=3306; User ID=; Pwd=; Database=projektityo2_nn_2206189;";
 
         const string SELECT_ALL_INVOICE = "SELECT * FROM invoice";
         const string DROP_DB = "DROP DATABASE IF EXISTS projektityo2_nn_2206189";
